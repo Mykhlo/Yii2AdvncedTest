@@ -12,14 +12,7 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [],
-    'components' => [
-        'view' => [
-            'theme' => [
-                'pathMap' => [
-                   '@app/views' => '@vendor/dmstr/yii2-adminlte-asset/example-views/yiisoft/yii2-app'
-                ],
-            ],
-       ],
+    'components' => [  
         'request' => [
             'csrfParam' => '_csrf-backend',
         ],

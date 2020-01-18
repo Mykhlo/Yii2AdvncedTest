@@ -17,7 +17,18 @@ class m200117_164723_create_product_category_table extends Migration
             'product_id' => 'integer',
             'category_id' => 'integer',
         ]);
+
+        // add foreign key for parent catgory
+        $this->addForeignKey(
+            'fk-id-parent_id',
+            'categories',
+            'parent_id',
+            'categories',
+            'id',
+            'CASCADE'
+        );
     }
+    
 
     /**
      * {@inheritdoc}

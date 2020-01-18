@@ -40,8 +40,13 @@ class Categories extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'parent_id' => 'Parent ID',
+            'parent_id' => 'Parent Category',
         ];
+    }
+    // get parent category
+    public function parent()
+    {
+        return $this->hasOne(Categories::className(), ['id' => 'parent_id']);
     }
     // get all products of category
     public function products() {
