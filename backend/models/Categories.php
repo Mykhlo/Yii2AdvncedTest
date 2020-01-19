@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\models\Products;    
 
 /**
  * This is the model class for table "categories".
@@ -28,7 +29,8 @@ class Categories extends \yii\db\ActiveRecord
     {
         return [
             [['parent_id'], 'integer'],
-            [['name'], 'string', 'max' => 255],
+            [['name'], 'string', 'max' => 255, ],
+            [['name'], 'unique'],
         ];
     }
 
@@ -43,14 +45,10 @@ class Categories extends \yii\db\ActiveRecord
             'parent_id' => 'Parent Category',
         ];
     }
-    // get parent category
-    public function parent()
-    {
-        return $this->hasOne(Categories::className(), ['id' => 'parent_id']);
-    }
+    
     // get all products of category
-    public function products() {
-        return $this->hasMany(Product::className(), ['id' => 'product_id'])
+    public function getProducts() {
+        return $this->hasMany(Products::className(), ['id' => 'product_id'])
           ->viaTable('product_category', ['category_id' => 'id']);
     }
 }

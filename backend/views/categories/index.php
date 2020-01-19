@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Categories', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
+    <?php if($error != NULL) echo '<p class="text-danger">'.$error.'</p>'; ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

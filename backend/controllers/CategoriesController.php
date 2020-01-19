@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use app\models\Categories;
+use app\models\ProductCategory;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -33,7 +34,7 @@ class CategoriesController extends Controller
      * Lists all Categories models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($error = NULL)
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Categories::find(),
@@ -41,6 +42,7 @@ class CategoriesController extends Controller
         $categories = $this->findAll();
 
         return $this->render('index', [
+            'error' => $error,
             'dataProvider' => $dataProvider,
             'categories' => $categories,
         ]);
@@ -76,7 +78,7 @@ class CategoriesController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('_form', [            
+        return $this->render('_form', [                   
             'model' => $model,
             'categories' => $categories,
         ]);
@@ -115,9 +117,22 @@ class CategoriesController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $products = ProductCategory::find()
+            ->where(['category_id' => $id])
+            ->exists();
+        $childs = Categories::find()
+            ->where(['parent_id' => $id])
+            ->exists();
+        if($products){
+            $error = 'Category '.$this->findModel($id)->name.' has products!';
+        }else if($childs){
+            $error = 'Category '.$this->findModel($id)->name.' has subcategories!';
+        }else{
+            $error = NULL;
+            $this->findModel($id)->delete();
+        }        
 
-        return $this->redirect(['index']);
+        return $this->redirect(['index', 'error' => $error]);
     }    
 
     /**

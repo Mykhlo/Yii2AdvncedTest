@@ -2,17 +2,16 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use app\models\Categories;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Categories */
+/* @var $model app\models\Products */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Categories', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="categories-view">
+<div class="products-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -21,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item? All related categories will be deleted!',
+                'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -32,10 +31,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'name',
-            [
-                'attribute' => 'parent',
-                'value' =>  $parent == NULL ? $parent : $parent->name,
-            ],
+            'description:ntext',
+            'full_desc:ntext',
+            'price',
+            'quantity',
         ],
     ]) ?>
 

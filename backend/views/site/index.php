@@ -13,6 +13,7 @@ $this->title = 'My Yii Application';
         <p class="lead">You have successfully created your Yii-powered application.</p>
 
         <p><?= Html::a('Categories', ['/categories/index'], ['class'=>'btn btn-success']) ?></p>
+        <p><?= Html::a('Products', ['/products/index'], ['class'=>'btn btn-success']) ?></p>
     </div>
 
     <div class="body-content">

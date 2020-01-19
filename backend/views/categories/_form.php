@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
 
 <div class="categories-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(); ?>    
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
