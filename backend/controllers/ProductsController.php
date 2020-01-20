@@ -28,6 +28,18 @@ class ProductsController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                // 'only' => ['create', 'update'],
+                'rules' => [                   
+                    // allow authenticated users
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    // everything else is denied
+                ],
+            ],
         ];
     }
 
@@ -66,7 +78,7 @@ class ProductsController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Products();
+        $model = new Products();        
         
         if ($model->load(Yii::$app->request->post())) {
             $request = Yii::$app->request->post();
@@ -94,10 +106,7 @@ class ProductsController extends Controller
             'error' => $error ?? NULL,
             'model' => $model,
             'categories' => Categories::find()->where(['not', ['parent_id' => NULL]])->select(['id', 'name'])->all(),
-        ]);
-        
-
-        
+        ]);        
     }
 
     /**
@@ -109,14 +118,16 @@ class ProductsController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-
+        $model = $this->findModel($id);  
+        // scenario for validation
+        $model->scenario = Products::SCENARIO_UPDATE;              
+        
         if ($model->load(Yii::$app->request->post())) {
             $request = Yii::$app->request->post();
             $categories = $request['Products']['categories'];
 
             // save relation
-            if($categories != NULL && $model->save()){ 
+            if($categories != NULL && $model->update()){ 
 
                 /* clear old relations before saving */
                 ProductCategory::deleteAll(['product_id' => $model->id]);

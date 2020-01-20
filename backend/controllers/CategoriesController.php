@@ -27,6 +27,18 @@ class CategoriesController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                // 'only' => ['create', 'update'],
+                'rules' => [                   
+                    // allow authenticated users
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    // everything else is denied
+                ],
+            ],
         ];
     }
 
@@ -36,6 +48,10 @@ class CategoriesController extends Controller
      */
     public function actionIndex($error = NULL)
     {
+        // redirect unlogged user
+        // if ( Yii::$app->user->isGuest )
+        //     return Yii::$app->getResponse()->redirect(array(Url::to(['site/login'],302)));
+
         $dataProvider = new ActiveDataProvider([
             'query' => Categories::find(),
         ]);
@@ -71,7 +87,8 @@ class CategoriesController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Categories(); 
+        $model = new Categories();        
+
         $categories = $this->findAll();       
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -94,6 +111,10 @@ class CategoriesController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        
+        // scenario for validation
+        $model->scenario = Categories::SCENARIO_UPDATE;
+
         $categories = $this->findAll();
         unset($categories[$id]);
                  

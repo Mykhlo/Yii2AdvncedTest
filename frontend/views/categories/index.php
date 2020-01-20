@@ -29,8 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'Products',                
-                'value' => function ($data) {                    
-                    return $data->parent_id == NULL ? '' : Html::a('Products in '.$data->name,'/index.php?r=products%2Findex&id='.$data->id);                    
+                'value' => function ($data) {   
+                    if($data->parent_id == NULL){
+                        return Html::a('Products in '.$data->name. ' subcategories','/index.php?r=products%2Findex&id='.$data->id);                    
+                    } else {
+                        return Html::a('Products in '.$data->name,'/index.php?r=products%2Findex&id='.$data->id);                  
+                    }                      
                 },
                 'format' => 'raw',
             ],              

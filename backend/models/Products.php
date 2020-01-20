@@ -17,6 +17,24 @@ use app\models\Categories;
  */
 class Products extends \yii\db\ActiveRecord
 {
+    const SCENARIO_UPDATE = 'update';    
+
+    /**
+     * Scenario for separated validation
+     */
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_UPDATE] = [
+                'name',
+                'description',
+                'full_desc',
+                'price',
+                'quantity',
+            ];        
+        return $scenarios;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -34,9 +52,12 @@ class Products extends \yii\db\ActiveRecord
             [['description', 'full_desc'], 'string'],
             [['price', 'quantity'], 'integer'],
             [['name'], 'string', 'max' => 255],
-            [['name'], 'unique'],
+            [['name'], 'unique',],           
+            [['name'], 'unique', 'on' => self::SCENARIO_UPDATE,'when' => function($model){                
+                return $model->isAttributeChanged('name');
+            }],         
         ];
-    }
+    }    
 
     /**
      * {@inheritdoc}

@@ -13,7 +13,23 @@ use app\models\Products;
  * @property int|null $parent_id
  */
 class Categories extends \yii\db\ActiveRecord
-{
+{      
+    const SCENARIO_UPDATE = 'update';   
+
+    /**
+     * Scenario for separated validation
+     */
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();        
+
+        $scenarios[self::SCENARIO_UPDATE] = [
+            'name',
+            'parent_id',                
+        ];      
+        return $scenarios;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -30,7 +46,10 @@ class Categories extends \yii\db\ActiveRecord
         return [
             [['parent_id'], 'integer'],
             [['name'], 'string', 'max' => 255, ],
-            [['name'], 'unique'],
+            [['name'], 'unique',],           
+            [['name'], 'unique', 'on' => self::SCENARIO_UPDATE,'when' => function($model){                
+                return $model->isAttributeChanged('name');
+            }],            
         ];
     }
 
